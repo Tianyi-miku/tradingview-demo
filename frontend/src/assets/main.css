@@ -1,0 +1,28 @@
+@import './base.css';
+
+html,
+body,
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  font-weight: normal;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
