@@ -13,12 +13,15 @@ export default defineConfig({
       //   changeOrigin: true,
       //   secure: false,
       // },
-    },
+      '/api': {
+        target: 'http://127.0.0.1:5000/',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, "")
+      }
+    }
   },
-  plugins: [
-    vue(),
-    vueJsx(),
-  ],
+  plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

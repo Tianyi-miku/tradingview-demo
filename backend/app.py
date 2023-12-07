@@ -15,14 +15,12 @@ def hello_world():
 
 @app.route('/getMsg', methods=['GET', 'POST'])
 def home():
-    data=request.json.get('centent')
-    print(data)
     pro=ts.pro_api(token)
-    pa=pro.daily(ts_code='000001.sz', start_date='20190101', end_date='20200213')
+    data = pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
     response = {
-        'msg': pa.to_json()
+        'data': data.to_json()
     }
-    return jsonify(response)
+    return response
 
 # 启动运行
 if __name__ == '__main__':
