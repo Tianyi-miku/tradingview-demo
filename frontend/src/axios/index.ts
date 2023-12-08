@@ -1,11 +1,3 @@
-/*
- * @Description: 
- * @Author: zhangyuru
- * @Date: 2022-10-27 16:45:13
- * @LastEditors: zhangyuru
- * @LastEditTime: 2023-02-09 11:10:49
- * @FilePath: \04-simulation_front_vue3\src\axios\index.ts
- */
 
 import axios from 'axios'
 import { VueAxios } from './axios'
