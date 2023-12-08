@@ -1,4 +1,5 @@
-import { makeApiRequest, generateSymbol, parseFullSymbol } from './helpers.js'
+import dayjs from 'dayjs'
+import { makeApiRequest, generateSymbol, parseFullSymbol } from './helpers copy'
 
 // DatafeedConfiguration implementation
 const configurationData = {
@@ -8,9 +9,6 @@ const configurationData = {
   exchanges: [
     { value: 'Bitfinex', name: 'Bitfinex', desc: 'Bitfinex' },
     { value: 'Kraken', name: 'Kraken', desc: 'Kraken bitcoin exchange' }
-    // { value: '', name: 'All Exchanges', desc: '' },
-    // { value: 'NasdaqNM', name: 'NasdaqNM', desc: 'NasdaqNM' },
-    // { value: 'NYSE', name: 'NYSE', desc: 'NYSE' }
   ],
   // The `symbols_types` arguments are used for the `searchSymbols` method if a user selects this symbol type
   symbols_types: [{ name: 'crypto', value: 'crypto' }]
@@ -18,27 +16,14 @@ const configurationData = {
 
 // Obtains all symbols for all exchanges supported by CryptoCompare API
 async function getAllSymbols() {
-  const data = await makeApiRequest('data/v3/all/exchanges')
-  let allSymbols = []
-
-  for (const exchange of configurationData.exchanges) {
-    const pairs = data.Data[exchange.value].pairs
-
-    for (const leftPairPart of Object.keys(pairs)) {
-      const symbols = pairs[leftPairPart].map((rightPairPart) => {
-        const symbol = generateSymbol(exchange.value, leftPairPart, rightPairPart)
-        return {
-          symbol: symbol.short,
-          full_name: symbol.full,
-          description: symbol.short,
-          exchange: exchange.value,
-          type: 'crypto'
-        }
-      })
-      allSymbols = [...allSymbols, ...symbols]
-    }
-  }
-  return allSymbols
+  const data = await makeApiRequest('getStockList')
+  // data.forEach((element) => {
+  //   // element.exchange = element.ts_code
+  //   element.description = element.ts_code
+  //   element.type = 'crypto'
+  // })
+  console.log(data)
+  return data
 }
 
 export default {
@@ -67,7 +52,7 @@ export default {
   ) => {
     console.log('[resolveSymbol]: Method call', symbolName)
     const symbols = await getAllSymbols()
-    const symbolItem = symbols.find(({ full_name }) => full_name === symbolName)
+    const symbolItem = symbols.find(({ symbol }) => symbol === symbolName)
     if (!symbolItem) {
       console.log('[resolveSymbol]: Cannot resolve symbol', symbolName)
       onResolveErrorCallback('Cannot resolve symbol')
@@ -75,13 +60,12 @@ export default {
     }
     // Symbol information object
     const symbolInfo = {
-      ticker: symbolItem.full_name,
+      ticker: symbolItem.name,
       name: symbolItem.symbol,
-      description: symbolItem.description,
-      type: symbolItem.type,
+      description: symbolItem.name,
+      type: '',
       session: '24x7',
       timezone: 'Etc/UTC',
-      exchange: symbolItem.exchange,
       minmov: 1,
       pricescale: 100,
       has_intraday: false,
@@ -89,7 +73,8 @@ export default {
       has_weekly_and_monthly: false,
       supported_resolutions: configurationData.supported_resolutions,
       volume_precision: 2,
-      data_status: 'streaming'
+      data_status: 'streaming',
+      ts_code: symbolItem.ts_code
     }
     console.log('[resolveSymbol]: Symbol resolved', symbolName)
     onSymbolResolvedCallback(symbolInfo)
@@ -109,41 +94,37 @@ export default {
     const to = rangeEndDate
     // const { from, to, firstDataRequest } = periodParams
     console.log('[getBars]: Method call', symbolInfo, resolution, from, to)
-    const parsedSymbol = parseFullSymbol(symbolInfo.full_name)
+    // const parsedSymbol = parseFullSymbol(symbolInfo.full_name)
+    const parsedSymbol = symbolInfo
+
     const urlParameters = {
-      e: parsedSymbol.exchange,
-      fsym: parsedSymbol.fromSymbol,
-      tsym: parsedSymbol.toSymbol,
-      toTs: to,
-      limit: 2000
+      ts_code: parsedSymbol.ts_code,
+      start_date: from,
+      end_date: to
     }
     const query = Object.keys(urlParameters)
       .map((name) => `${name}=${encodeURIComponent(urlParameters[name])}`)
       .join('&')
     try {
-      const data = await makeApiRequest(`data/histoday?${query}`)
-      if ((data.Response && data.Response === 'Error') || data.Data.length === 0) {
-        // "noData" should be set if there is no data in the requested period
+      const data = await makeApiRequest(`getHistaryData?${query}`)
+
+      if (data.length === 0) {
         onHistoryCallback([], { noData: true })
         return
       }
       let bars = []
-      data.Data.forEach((bar) => {
-        if (bar.time >= from && bar.time < to) {
-          bars = [
-            ...bars,
-            {
-              time: bar.time * 1000,
-              low: bar.low,
-              high: bar.high,
-              open: bar.open,
-              close: bar.close
-            }
-          ]
-        }
+      data.forEach((bar) => {
+        bars = [
+          ...bars,
+          {
+            time: dayjs(bar.trade_date).unix() * 1000,
+            low: bar.low,
+            high: bar.high,
+            open: bar.open,
+            close: bar.close
+          }
+        ]
       })
-      console.log(bars);
-      debugger
       console.log(`[getBars]: returned ${bars.length} bar(s)`)
       onHistoryCallback(bars, { noData: false })
     } catch (error) {

@@ -1,17 +1,13 @@
 import request from '@/axios'
 
 const tradingviewApi = {
-  getMsgbyNameAndTime: '/getMsgbyNameAndTime',
+  getData: '/'
 }
 
 //根据名称，时间获取数据
-export function getMsgbyNameAndTime() {
+export function getData(path: string) {
   return request({
-    url: tradingviewApi.getMsgbyNameAndTime,
+    url: tradingviewApi.getData + path,
     method: 'get'
   })
-}
-
-export default {
-  getMsgbyNameAndTime,
 }

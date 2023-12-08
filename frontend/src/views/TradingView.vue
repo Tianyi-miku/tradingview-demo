@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import DataFeeds from '@/util/feed/datafeed.js'
+// import DataFeeds from '@/util/feed/datafeed.js'
+import DataFeeds from '@/util/feed/datafeed copy.js'
 
 onMounted(() => {
   setChart()
@@ -9,7 +10,9 @@ onMounted(() => {
 const setChart = () => {
   new window.TradingView.widget({
     fullscreen: true, //全屏
-    symbol: 'Bitfinex:BTC/USD', // 产品
+    // symbol: 'Bitfinex:BTC/USD', // 产品
+    symbol: '000001',
+    // symbol: 'AAPL',
     interval: '1D',  // 时间间隔
     container_id: "chart_container",
 
