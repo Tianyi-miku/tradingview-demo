@@ -1,11 +1,11 @@
 # 预览
 
-![image](image.png)
+![image](img/image.png)
 
 # 环境准备
 前端node环境 v18.17.1 [官网](https://nodejs.org/en) 
 后端python 3.11.0rc2  [官网](https://www.python.org/) 
-![image](image2.png)
+![image](img/image2.png)
 # 启动 vue 前端
 
 进入前端文件夹
@@ -56,4 +56,4 @@ flask --app app run
 
 # 报错,因为 tushare 积分不够，可能展示不出来，将 app.py 中的 token 换成您自己的 token，或者启动 test.py 测试数据！
 
-![image](image1.png)
+![image](img/image1.png)
