@@ -36,6 +36,11 @@ npm run dev
 ```sh
 cd .\backend\
 ```
+### 下载依赖
+
+```sh
+pip install -r requirements.txt 
+```
 
 ### 启动测试数据
 
