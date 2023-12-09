@@ -5,3 +5,5 @@ declare interface Window {
     Datafeeds:any
 }
   
+
+declare module '@/util/feed/datafeed.js'

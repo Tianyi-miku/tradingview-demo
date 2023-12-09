@@ -1,8 +1,10 @@
 // Makes requests to CryptoCompare API
+import { getData } from '../../api/tradingview'
+
 export async function makeApiRequest(path) {
   try {
-    const response = await fetch(`https://min-api.cryptocompare.com/${path}`)
-    return response.json()
+    const response1 = await getData(path)
+    return response1
   } catch (error) {
     throw new Error(`CryptoCompare request error: ${error.status}`)
   }
