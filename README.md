@@ -2,6 +2,10 @@
 
 ![image](image.png)
 
+# 环境准备
+前端node环境 v18.17.1 [官网](https://nodejs.org/en) 
+后端python 3.11.0rc2  [官网](https://www.python.org/) 
+![image](image2.png)
 # 启动 vue 前端
 
 进入前端文件夹
