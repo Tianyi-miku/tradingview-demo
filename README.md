@@ -1,9 +1,11 @@
+# 预览
 
-![image](imgae.png)
+![image](image.png)
 
-# 启动vue前端
+# 启动 vue 前端
 
 进入前端文件夹
+
 ```sh
 cd .\frontend\
 ```
@@ -15,16 +17,19 @@ npm install
 ```
 
 ### 启动
+
 ```sh
 npm run dev
 ```
-打开http://localhost:5173/
 
-具体查看前端README
+打开 http://localhost:5173/
 
-# 启动python+flask后端，没有使用数据库
+具体查看前端 README
+
+# 启动 python+flask 后端，由于没有使用数据库，查询次数有限
 
 进入后端文件夹
+
 ```sh
 cd .\backend\
 ```
@@ -41,9 +46,16 @@ pip install
 flask --app test run
 ```
 
-### 启动正式数据，因为tushare积分不够，可能展示不出来，将app.py中的token换成您自己的token，或者启动test.py测试数据！
+### 启动正式数据
 
 ```sh
 flask --app app run
 ```
-具体查看后端README
+
+# 报错,因为 tushare 积分不够，可能展示不出来，将 app.py 中的 token 换成您自己的 token，或者启动 test.py 测试数据！
+
+![image](image1.png)
+
+###
+
+具体查看后端 README
